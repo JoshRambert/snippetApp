@@ -28,7 +28,7 @@ class ViewController: UIViewController {
      *
      *
      */
-    @IBAction func createNewSnippet(sender: AnyObject) {
+    @IBAction func createNewSnippet(_sender: AnyObject) {
         //create a constant that will store the snippetData then add the snippetdata to the snippetData Array
         
         let newSnippet = SnippetData(); /* The "SnippetData on the left hand side is referring to the Struct file we created earlier */

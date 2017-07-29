@@ -25,7 +25,11 @@
                                 <rect key="frame" x="0.0" y="623" width="375" height="44"/>
                                 <items>
                                     <barButtonItem style="plain" systemItem="flexibleSpace" id="C0I-JQ-m87"/>
-                                    <barButtonItem title="New" width="341" id="Gdi-od-rmr"/>
+                                    <barButtonItem title="New" width="341" id="Gdi-od-rmr">
+                                        <connections>
+                                            <action selector="createNewSnippetWith_sender:" destination="BYZ-38-t0r" id="WIx-qZ-Qm2"/>
+                                        </connections>
+                                    </barButtonItem>
                                     <barButtonItem style="plain" systemItem="flexibleSpace" id="rox-ld-Kjw"/>
                                 </items>
                             </toolbar>
