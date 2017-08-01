@@ -30,7 +30,7 @@ class ViewController: UIViewController {
      */
     @IBAction func createNewSnippet(_sender: AnyObject) {
         //create the UI alert controllers to prompt the the user to select a type of snippet start with the constants
-        let alert = UIAlertController(title: "Select a snippet type", message: nil, preferredStyle: .actionSheet);
+        let alert = UIAlertController(title: "Select a Snippet type", message: nil, preferredStyle: .actionSheet);
         /*
          Here the UIALertActions work more as an option menu for the user
          *
@@ -43,11 +43,11 @@ class ViewController: UIViewController {
          */
         
         //create the UIAlertAction for when the user chooses text
-        let textAction = UIAlertAction(title: "text", style: .default) { (alert: UIAlertAction!) -> Void in self.data.append(SnippetData(snippetType: .text))
+        let textAction = UIAlertAction(title: "Text", style: .default) { (alert: UIAlertAction!) -> Void in self.data.append(SnippetData(snippetType: .text))
         }
         
         //create the UIAlertAction for when the user chooses a photo
-        let photoAction = UIAlertAction(title: "photo", style: .default) {(alert: UIAlertAction!) -> Void in self.data.append(SnippetData(snippetType: .photo))
+        let photoAction = UIAlertAction(title: "Photo", style: .default) {(alert: UIAlertAction!) -> Void in self.data.append(SnippetData(snippetType: .photo))
         }
         
         //create the UIALertAction for when the User chooses to cancel making a snippet 

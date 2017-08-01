@@ -13,6 +13,7 @@
 		410281F91F2D262A005CE1EC /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 410281F81F2D262A005CE1EC /* Assets.xcassets */; };
 		410281FC1F2D262A005CE1EC /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 410281FA1F2D262A005CE1EC /* LaunchScreen.storyboard */; };
 		410282041F2D26C4005CE1EC /* SnippetData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 410282031F2D26C4005CE1EC /* SnippetData.swift */; };
+		41F8C1531F2FA461001BF476 /* TextSnippetEntryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 41F8C1521F2FA461001BF476 /* TextSnippetEntryViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -24,6 +25,7 @@
 		410281FB1F2D262A005CE1EC /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		410281FD1F2D262A005CE1EC /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		410282031F2D26C4005CE1EC /* SnippetData.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SnippetData.swift; sourceTree = "<group>"; };
+		41F8C1521F2FA461001BF476 /* TextSnippetEntryViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TextSnippetEntryViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -63,6 +65,7 @@
 				410281FA1F2D262A005CE1EC /* LaunchScreen.storyboard */,
 				410281FD1F2D262A005CE1EC /* Info.plist */,
 				410282031F2D26C4005CE1EC /* SnippetData.swift */,
+				41F8C1521F2FA461001BF476 /* TextSnippetEntryViewController.swift */,
 			);
 			path = SnippetApp;
 			sourceTree = "<group>";
@@ -140,6 +143,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				41F8C1531F2FA461001BF476 /* TextSnippetEntryViewController.swift in Sources */,
 				410281F41F2D262A005CE1EC /* ViewController.swift in Sources */,
 				410281F21F2D262A005CE1EC /* AppDelegate.swift in Sources */,
 				410282041F2D26C4005CE1EC /* SnippetData.swift in Sources */,
@@ -304,6 +308,7 @@
 				410282021F2D262A005CE1EC /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
