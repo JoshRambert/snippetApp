@@ -32,7 +32,7 @@ class ViewController: UIViewController {
         //create the UI alert controllers to prompt the the user to select a type of snippet start with the constants
         let alert = UIAlertController(title: "Select a Snippet type", message: nil, preferredStyle: .actionSheet);
         /*
-         Here the UIALertActions work more as an option menu for the user
+         Here the UIAlertActions work more as an option menu for the user
          *
          Each alert has three things that have to be inside of it -- the "Title" the "Style" and the completion handler which is what it does when the button is clicked.
          *
@@ -42,8 +42,31 @@ class ViewController: UIViewController {
          the "self" keyword makes it so that you are explicit about the scope and reuse it whenever the completion handler is run
          */
         
+        
+        //create the function for loading/inflating the textEntrySnippet
+        func createNewTextSnippet() {
+            guard let textEntryVC = storyboard?.instantiateViewController(withIdentifier: "textSnippetEntry") as? TextSnippetEntryViewController
+            else {
+                print("TextSnippetEntryViewController could not be instantiated")
+                return
+            }
+            
+            //this is the transition style from one view controller to the next -- it will slide up from the bottom when presented
+            textEntryVC.modalTransitionStyle = .coverVertical;
+            
+            //redfine the body of the other view Controllers saveText closure to append the textSnippet to the data array
+            textEntryVC.saveText = {(text: String)
+                in
+                let newTextSnippet = textData(text: text)
+                self.data.append(newTextSnippet);
+            }
+ 
+            present(textEntryVC, animated: true, completion: nil);
+            
+        }
+        
         //create the UIAlertAction for when the user chooses text
-        let textAction = UIAlertAction(title: "Text", style: .default) { (alert: UIAlertAction!) -> Void in self.data.append(SnippetData(snippetType: .text))
+        let textAction = UIAlertAction(title: "Text", style: .default) { (alert: UIAlertAction!) -> Void in createNewTextSnippet()
         }
         
         //create the UIAlertAction for when the user chooses a photo

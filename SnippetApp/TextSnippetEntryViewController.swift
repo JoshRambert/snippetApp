@@ -12,6 +12,12 @@ import UIKit
 //declare the new class as a sublclass of the UITextViewController
 class TextSnippetEntryViewController: UIViewController{
     
+    //create a closure that will write something to the command line confirming that we have a new text data object -- name the closure saveText
+    var saveText: (_ text: String) -> Void = {
+        (text: String)
+        in }
+    
+    
     //create the outlet for the textview from the viewController
     @IBOutlet weak var textEntryOutlet: UITextView!
     
@@ -30,14 +36,21 @@ class TextSnippetEntryViewController: UIViewController{
 /*
  going to be adding a textView later that is why it is implemented now
  */
+
+/*
+ *
+ *
+ Remeber "extensions" are used to add more functionality to a class
+ */
 extension TextSnippetEntryViewController: UITextViewDelegate{
     
     //also create a function that will be called once the user is finished editing
-    func textViewDidEndEditing(_textView: UITextView){
+    func textViewDidEndEditing(textEntryOutlet: UITextView){
+        //before dismissing the view controller execute the closure and pass in the UItexViews text
+        saveText(textEntryOutlet.text);
 
         //add code to this function to dismiss the textView once the user is done editing  and return to the main screen 
         dismiss(animated: true, completion: nil);
-        
     }
     //create a function that places a "Done" button above the keyboard with a toolbar
     func createKeyboardToolbar() -> UIView {
