@@ -7,6 +7,8 @@
 //
 
 import Foundation
+//this allows us to use the UIImage class in our new data structure
+import UIKit
 //BARE_BONES walk through
 
 //add the two types of snippet data(Photo, Text) using an enum
@@ -34,7 +36,7 @@ class SnippetData{
     }
 }
 
-class textData: SnippetData{
+class TextData: SnippetData{
     //create a variable to hold the text data
     let textData: String;
     
@@ -49,6 +51,17 @@ class textData: SnippetData{
         
         //print the text snippet data
         print("Text Snippet data \(textData)");
+    }
+}
+
+//do what you did for the text data class except with the photo -- using UI image instead of a String 
+class PhotoData : SnippetData {
+    let photoData: UIImage
+    
+    init ( photo: UIImage ){
+        photoData = photo
+        super.init(snippetType: .photo)
+        print("Photo snippet data: \(photoData)")
     }
 }
 

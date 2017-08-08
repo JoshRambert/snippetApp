@@ -34,5 +34,7 @@
 		<string>UIInterfaceOrientationLandscapeLeft</string>
 		<string>UIInterfaceOrientationLandscapeRight</string>
 	</array>
+	<key>Privacy - Camera Usage Description </key>
+	<string>Snippets needs to access the camera to create photo snippets </string>
 </dict>
 </plist>

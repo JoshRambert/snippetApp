@@ -30,28 +30,7 @@ class TextSnippetEntryViewController: UIViewController{
         //make sure that the TextView is the first responder bringing up the keyboard with this simple statement
         textEntryOutlet.becomeFirstResponder();
     }
-}
 
-//create an extension to implement the protocol
-/*
- going to be adding a textView later that is why it is implemented now
- */
-
-/*
- *
- *
- Remeber "extensions" are used to add more functionality to a class
- */
-extension TextSnippetEntryViewController: UITextViewDelegate{
-    
-    //also create a function that will be called once the user is finished editing
-    func textViewDidEndEditing(textEntryOutlet: UITextView){
-        //before dismissing the view controller execute the closure and pass in the UItexViews text
-        saveText(textEntryOutlet.text);
-
-        //add code to this function to dismiss the textView once the user is done editing  and return to the main screen 
-        dismiss(animated: true, completion: nil);
-    }
     //create a function that places a "Done" button above the keyboard with a toolbar
     func createKeyboardToolbar() -> UIView {
         
@@ -80,5 +59,17 @@ extension TextSnippetEntryViewController: UITextViewDelegate{
     //create the function "doneButtonPressed" which gets rid of the keyboard within the TexView
     func doneButtonPressed(){
         textEntryOutlet.resignFirstResponder();
+    }
+}
+
+extension TextSnippetEntryViewController: UITextViewDelegate{
+    
+    //also create a function that will be called once the user is finished editing
+    func textViewDidEndEditing(textEntryOutlet: UITextView){
+        //before dismissing the view controller execute the closure and pass in the UItexViews text
+        saveText(textEntryOutlet.text);
+        
+        //add code to this function to dismiss the textView once the user is done editing  and return to the main screen
+        dismiss(animated: true, completion: nil);
     }
 }
