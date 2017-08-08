@@ -87,7 +87,7 @@ class ViewController: UIViewController {
         //redfine the body of the other view Controllers saveText closure to append the textSnippet to the data array
         textEntryVC.saveText = {(text: String)
             in
-            let newTextSnippet = TextData(text: text)
+            let newTextSnippet = TextData(text: text, creationDate: Date())
             self.data.append(newTextSnippet);
         }
         
@@ -120,7 +120,7 @@ extension ViewController : UIImagePickerControllerDelegate, UINavigationControll
                 print("Image could not be found")
                 return
         }
-        let newPhotoSnippet = PhotoData(photo: image)
+        let newPhotoSnippet = PhotoData(photo: image, creationDate: Date())
         self.data.append(newPhotoSnippet)
         
         //dismiss the photo snippet 
@@ -150,10 +150,17 @@ extension ViewController : UITableViewDataSource {
         //ask for the specific type of data at the specific row
         let snippetData = sortData[indexPath.row]
         
+        //format the date stored in the Date to something readable a, and then assign the string to our date label 
+        let formatter = DateFormatter();
+        formatter.dateFormat = "MMM d, yyyy hh:mm a"
+        let dateString = formatter.string(from: snippetData.date);
+        
         //create a aswitch statement depending on what type of data it is
         switch snippetData.type{
         case .text: cell = tableView.dequeueReusableCell(withIdentifier: "textSnippetCell", for: indexPath)
             (cell as! TextSnippetCell).label.text = (snippetData as! TextData).textData
+        //assign the date String to our date label 
+            (cell as! TextSnippetCell).date.text = dateString
             
         case .photo: cell = tableView.dequeueReusableCell(withIdentifier: "photoSnippetCell", for: indexPath)
         (cell as! PhotoSnippetCell).photo.image = (snippetData as! PhotoData).photoData

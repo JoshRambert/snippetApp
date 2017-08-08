@@ -37,8 +37,8 @@
                                     <outlet property="delegate" destination="Gdi-od-rmr" id="tBs-lC-0CL"/>
                                 </connections>
                             </toolbar>
-                            <tableView clipsSubviews="YES" contentMode="scaleToFill" misplaced="YES" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="none" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="ogo-hj-cbG">
-                                <rect key="frame" x="0.0" y="0.0" width="375" height="603"/>
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="none" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="ogo-hj-cbG">
+                                <rect key="frame" x="0.0" y="20" width="375" height="603"/>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                 <prototypes>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="textSnippetCell" id="DRt-DE-9tp" customClass="TextSnippetCell" customModule="SnippetApp" customModuleProvider="target">
@@ -48,21 +48,44 @@
                                             <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
+                                                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="g2A-Pi-sOP">
+                                                    <rect key="frame" x="0.0" y="24" width="375" height="20"/>
+                                                    <subviews>
+                                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="yTi-Pt-NmU">
+                                                            <rect key="frame" x="8" y="-1" width="359" height="21"/>
+                                                            <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                            <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                                            <nil key="highlightedColor"/>
+                                                        </label>
+                                                    </subviews>
+                                                    <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
+                                                    <constraints>
+                                                        <constraint firstItem="yTi-Pt-NmU" firstAttribute="leading" secondItem="g2A-Pi-sOP" secondAttribute="leading" constant="8" id="XLe-j3-7x8"/>
+                                                        <constraint firstAttribute="bottom" secondItem="yTi-Pt-NmU" secondAttribute="bottom" id="dHF-gP-bbd"/>
+                                                        <constraint firstAttribute="trailing" secondItem="yTi-Pt-NmU" secondAttribute="trailing" constant="8" id="k6H-8x-Fio"/>
+                                                    </constraints>
+                                                </view>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="xL7-2u-ZsR">
-                                                    <rect key="frame" x="8" y="8" width="359" height="28"/>
+                                                    <rect key="frame" x="8" y="8" width="359" height="8"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                     <nil key="textColor"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                             </subviews>
                                             <constraints>
-                                                <constraint firstAttribute="bottomMargin" secondItem="xL7-2u-ZsR" secondAttribute="bottom" id="Tro-Dl-Xuo"/>
+                                                <constraint firstItem="g2A-Pi-sOP" firstAttribute="top" secondItem="xL7-2u-ZsR" secondAttribute="bottom" constant="8" id="1Le-oc-tZw"/>
+                                                <constraint firstItem="g2A-Pi-sOP" firstAttribute="top" secondItem="oF2-tu-Mwq" secondAttribute="top" constant="24" id="Eak-cX-LMr"/>
+                                                <constraint firstItem="g2A-Pi-sOP" firstAttribute="top" secondItem="oF2-tu-Mwq" secondAttribute="top" constant="24" id="H41-SM-Xxg"/>
                                                 <constraint firstItem="xL7-2u-ZsR" firstAttribute="leading" secondItem="oF2-tu-Mwq" secondAttribute="leadingMargin" id="aAe-PC-aES"/>
                                                 <constraint firstItem="xL7-2u-ZsR" firstAttribute="top" secondItem="oF2-tu-Mwq" secondAttribute="topMargin" id="e5z-zc-1vs"/>
+                                                <constraint firstAttribute="bottom" secondItem="g2A-Pi-sOP" secondAttribute="bottom" id="oJD-17-cej"/>
                                                 <constraint firstAttribute="trailingMargin" secondItem="xL7-2u-ZsR" secondAttribute="trailing" id="pUy-ur-356"/>
+                                                <constraint firstItem="g2A-Pi-sOP" firstAttribute="leading" secondItem="oF2-tu-Mwq" secondAttribute="leading" id="r1B-oD-Qiu"/>
+                                                <constraint firstAttribute="trailing" secondItem="g2A-Pi-sOP" secondAttribute="trailing" id="zDT-lb-2Z7"/>
                                             </constraints>
                                         </tableViewCellContentView>
                                         <connections>
+                                            <outlet property="date" destination="yTi-Pt-NmU" id="saU-ug-7hW"/>
                                             <outlet property="label" destination="xL7-2u-ZsR" id="1pz-3D-tbq"/>
                                         </connections>
                                     </tableViewCell>
@@ -102,7 +125,9 @@
                             <constraint firstItem="ogo-hj-cbG" firstAttribute="top" secondItem="y3c-jy-aDJ" secondAttribute="bottom" id="Eg8-wy-TMA"/>
                             <constraint firstItem="bVe-Gh-HFV" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" id="YyQ-tY-ePv"/>
                             <constraint firstItem="bVe-Gh-HFV" firstAttribute="top" secondItem="ogo-hj-cbG" secondAttribute="bottom" id="eo1-jY-em7"/>
+                            <constraint firstItem="bVe-Gh-HFV" firstAttribute="top" secondItem="ogo-hj-cbG" secondAttribute="bottom" id="ew1-s2-Obn"/>
                             <constraint firstItem="ogo-hj-cbG" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" id="kkh-FX-rpW"/>
+                            <constraint firstItem="bVe-Gh-HFV" firstAttribute="top" secondItem="ogo-hj-cbG" secondAttribute="bottom" id="vti-rq-eIc"/>
                             <constraint firstAttribute="trailing" secondItem="ogo-hj-cbG" secondAttribute="trailing" id="yNK-3L-LCG"/>
                         </constraints>
                     </view>

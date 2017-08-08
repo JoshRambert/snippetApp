@@ -11,4 +11,5 @@ import Foundation
 
 class TextSnippetCell: UITableViewCell{
     @IBOutlet var label: UILabel!;
+    @IBOutlet var date: UILabel!;
 }
