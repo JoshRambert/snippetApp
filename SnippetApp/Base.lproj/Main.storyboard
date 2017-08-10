@@ -89,7 +89,7 @@
                                             <outlet property="label" destination="xL7-2u-ZsR" id="1pz-3D-tbq"/>
                                         </connections>
                                     </tableViewCell>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" id="Doi-MC-DhQ" customClass="PhotoSnippetCell" customModule="SnippetApp" customModuleProvider="target">
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="photoSnippetCell" id="Doi-MC-DhQ" customClass="PhotoSnippetCell" customModule="SnippetApp" customModuleProvider="target">
                                         <rect key="frame" x="0.0" y="72" width="375" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="Doi-MC-DhQ" id="1vD-8r-dMK">
@@ -175,7 +175,7 @@
                         </constraints>
                     </view>
                     <connections>
-                        <outlet property="textEntryOutlet" destination="oEt-VE-VnT" id="p3P-Lg-BZg"/>
+                        <outlet property="textEntryOutlet" destination="oEt-VE-VnT" id="IQT-QH-xio"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="bLG-Tb-a7i" userLabel="First Responder" sceneMemberID="firstResponder"/>

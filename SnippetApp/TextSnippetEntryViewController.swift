@@ -11,6 +11,8 @@ import UIKit
 
 //declare the new class as a sublclass of the UITextViewController
 class TextSnippetEntryViewController: UIViewController{
+    //create a new property that will hold a bool value and tell the program when it should exit 
+    var shouldExit = false;
     
     //create a closure that will write something to the command line confirming that we have a new text data object -- name the closure saveText
     var saveText: (_ text: String) -> Void = {
@@ -58,6 +60,7 @@ class TextSnippetEntryViewController: UIViewController{
     
     //create the function "doneButtonPressed" which gets rid of the keyboard within the TexView
     func doneButtonPressed(){
+        shouldExit = true;
         textEntryOutlet.resignFirstResponder();
     }
 }
@@ -65,7 +68,10 @@ class TextSnippetEntryViewController: UIViewController{
 extension TextSnippetEntryViewController: UITextViewDelegate{
     
     //also create a function that will be called once the user is finished editing
-    func textViewDidEndEditing(textEntryOutlet: UITextView){
+    func textViewDidEndEditing(_ textEntryOutlet: UITextView){
+        //execute a guard statement to check if the done statement was pressed before saving data 
+        guard shouldExit else { return }
+        
         //before dismissing the view controller execute the closure and pass in the UItexViews text
         saveText(textEntryOutlet.text);
         

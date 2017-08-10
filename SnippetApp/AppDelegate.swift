@@ -6,10 +6,55 @@
 //  Copyright © 2017 Joshua's Games. All rights reserved.
 //
 
+/*
+ App delegate is where we take care of launching, entering and exiting the app -- the highest level of control
+ */
 import UIKit
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
+    //create a new enum for the shortCutItems that has a string as a backing item 
+    enum ShortCutItems : String {
+        case newText = "Rambo.SnippetApp.createTextSnippet"
+        case newPhoto = "Rambo.SnippetApp.createPhotoSnippet"
+    }
+    
+    //create an empty function to lay down some groundwork for the shortcuts -- this first function is where we are going to write the logic to determine what shortcut was executed and what to do about it
+    func handleShortcut(shortCutItem: UIApplicationShortcutItem) {
+        //here is how we will gain access to files from the App delegate
+        
+        //call the functions from within the app to the Case Statements
+        switch shortCutItem.type {
+        case ShortCutItems.newText.rawValue: let vc = self.window!.rootViewController as! ViewController
+        vc.createNewTextSnippet();
+        case ShortCutItems.newPhoto.rawValue: let vc = self.window!.rootViewController as! ViewController
+        vc.createNewPhotoSnippet();
+        default:
+            break
+        }
+    }
+    
+    //the next function is from the UIApplicationDelegate Protocol and will get automatically called when we launch the app 
+    func application(_ application: UIApplication, performActionFor shortcutItem: UIApplicationShortcutItem, completionHandler: @escaping (Bool) -> Void){
+        //here we are going to check if the user left the view Controller open before calling the shortcut again ---
+        let vc = self.window!.rootViewController!
+        if vc.presentedViewController != nil{
+            //use alert controller to ask the user -- continue the Action -- and erase the action
+            let alert = UIAlertController(title: "Unifinished Snippet", message: "Do you want to continue creating this snippet, or erase and start a new snippet?", preferredStyle: .alert)
+            let continueAction = UIAlertAction(title: "Continue", style: .default, handler: nil)
+            let eraseAction = UIAlertAction(title: "Erase", style: .destructive) {(alert: UIAlertAction!) -> Void in
+                vc.dismiss(animated: true, completion: nil)
+                self.handleShortcut(shortCutItem: shortcutItem);
+            }
+            alert.addAction(continueAction)
+            alert.addAction(eraseAction)
+            vc.presentedViewController!.present(alert, animated: true, completion: nil)
+        } else{
+            handleShortcut(shortCutItem: shortcutItem)
+        }
+        //call the first function in this function
+        handleShortcut(shortCutItem: shortcutItem);
+    }
 
     var window: UIWindow?
 
