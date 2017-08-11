@@ -7,9 +7,8 @@
 //
 
 import Foundation
-//this allows us to use the UIImage class in our new data structure
 import UIKit
-//BARE_BONES walk through
+import CoreLocation
 
 //add the two types of snippet data(Photo, Text) using an enum
 enum SnippetType: String {
@@ -20,22 +19,21 @@ enum SnippetType: String {
 //create the struct that will hold the data of the snippets
 class SnippetData{
     
-    //create a constant for the snippetType because it shouldnt change when chosen -- and one for the Date
+    //create a constant for the snippetType because it shouldnt change when chosen -- and one for the Date -- and lastly add one for the coordinate
     let type: SnippetType;
     let date: Date;
-    
+    let coordinate: CLLocationCoordinate2D?
     
     //create an init func that takes the snippet Type and displays wich one was chosen
     /*
      Created parameter for the InIt function and then assigned the parameter value to our type constant
      */
-    init(snippetType: SnippetType, creationDate: Date) {
-        
+    init(snippetType: SnippetType, creationDate: Date, creationCoordinate: CLLocationCoordinate2D?) {
         //this is where the type of snippet is chosen
         type = snippetType
         date = creationDate;
-        print("\(type.rawValue) Snippet created at \(date)")
-    
+        coordinate = creationCoordinate
+        print("\(type.rawValue) snippet created on \(date) at \(coordinate.debugDescription)");
     }
 }
 
@@ -44,13 +42,13 @@ class TextData: SnippetData{
     let textData: String;
     
     //create the initializer for the textData Subclass that takes a string as an argument
-    init(text: String, creationDate: Date){
+    init(text: String, creationDate: Date, creationCoordinate: CLLocationCoordinate2D?){
         
         //assign the argument within the intializer to the constant
         textData = text;
         
         //call the super classes init func
-    super.init(snippetType: .text, creationDate: creationDate);
+        super.init(snippetType: .text, creationDate: creationDate, creationCoordinate: creationCoordinate);
     
         //print the text snippet data
         print("Text Snippet data \(textData)");
@@ -61,9 +59,9 @@ class TextData: SnippetData{
 class PhotoData : SnippetData {
     let photoData: UIImage
     
-    init ( photo: UIImage, creationDate: Date ){
+    init ( photo: UIImage, creationDate: Date, creationCoordinate: CLLocationCoordinate2D? ){
         photoData = photo
-        super.init(snippetType: .photo, creationDate: creationDate)
+        super.init(snippetType: .photo, creationDate: creationDate, creationCoordinate: creationCoordinate)
         print("Photo snippet data: \(photoData)")
     }
 }

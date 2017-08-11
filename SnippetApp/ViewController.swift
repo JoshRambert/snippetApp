@@ -6,24 +6,40 @@
 //  Copyright © 2017 Joshua's Games. All rights reserved.
 //
 
+//import the location class 
+import CoreLocation
 import UIKit
 
 class ViewController: UIViewController {
-    //create a reference for the tableView 
-    @IBOutlet weak var tableView: UITableView!
-    
-    //declare an array of snippetData -- And Create a new instance of the Image picker
+    //declare an array of snippetData -- And Create a new instance of the Image picker -- create a property for to manage the Location
     var data: [SnippetData] = [SnippetData]();
     let imagePicker = UIImagePickerController();
-
+    let locationManager = CLLocationManager();
+    
+    //create a variable that will handle what actually happens when the location update is successfull
+    var currentCoordinate: CLLocationCoordinate2D?;
+    
+    //create a reference for the tableView
+    @IBOutlet weak var tableView: UITableView!
+    
     override func viewDidLoad() {
         super.viewDidLoad();
         //assign the Delegate for the Image Picker to the ciew controller class
         imagePicker.delegate = self;
         
+        //set the delegate of our location manager to the View Controller so it knows which ones to handle 
+        locationManager.delegate = self;
+        
+        //create some more properties for actually locating the user -- the first one sets the desired accuracy to its highest setting and then set the distance filter to 50 -- the distance filter tells the location manager how far away user must mover in order to update the location (in meters)
+        locationManager.desiredAccuracy = kCLLocationAccuracyBest;
+        locationManager.distanceFilter = 50.0
+        
         //tell the table view to match the height of whatever the user input 
         tableView.estimatedRowHeight = 100;
         tableView.rowHeight =  UITableViewAutomaticDimension
+        
+        //call the Location permission func 
+        askForLocationPermissions();
     }
     
     //tell the app when to load the data 
@@ -87,7 +103,7 @@ class ViewController: UIViewController {
         //redfine the body of the other view Controllers saveText closure to append the textSnippet to the data array
         textEntryVC.saveText = {(text: String)
             in
-            let newTextSnippet = TextData(text: text, creationDate: Date())
+            let newTextSnippet = TextData(text: text, creationDate: Date(), creationCoordinate: self.currentCoordinate)
             self.data.append(newTextSnippet);
         }
         
@@ -108,6 +124,13 @@ class ViewController: UIViewController {
         
         present(imagePicker, animated: true, completion: nil)
     }
+    
+    //create a function that asks for location permission 
+    func askForLocationPermissions(){
+        if CLLocationManager.authorizationStatus() == .notDetermined {
+            locationManager.requestWhenInUseAuthorization();
+        }
+    }
 }
 
 //create the UIViewController class extension that will utilize the Image picker controller -- 
@@ -120,7 +143,7 @@ extension ViewController : UIImagePickerControllerDelegate, UINavigationControll
                 print("Image could not be found")
                 return
         }
-        let newPhotoSnippet = PhotoData(photo: image, creationDate: Date())
+        let newPhotoSnippet = PhotoData(photo: image, creationDate: Date(), creationCoordinate: self.currentCoordinate)
         self.data.append(newPhotoSnippet)
         
         //dismiss the photo snippet 
@@ -166,6 +189,29 @@ extension ViewController : UITableViewDataSource {
         (cell as! PhotoSnippetCell).photo.image = (snippetData as! PhotoData).photoData
         }
         return cell;
+    }
+}
+
+//create another class extension for the functinoality of the location within the app 
+extension ViewController : CLLocationManagerDelegate{
+    //this function is called when the location manager first starts up and if the authorization is ever changed
+    func locationManager(_ manager: CLLocationManager, didChangeAuthorization status: CLAuthorizationStatus) {
+        if status == .authorizedWhenInUse {
+          locationManager.startUpdatingLocation()
+        }
+    }
+    
+    //create two more functions -- one that handles a successful Locationupdate and another that handles an error
+    func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
+        print("Location manager could not get location.Error: \(error.localizedDescription)")
+    }
+    
+    //create the function that lets us know about the succesful location update
+    func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
+        if let currentLocation = locations.last {
+            currentCoordinate = currentLocation.coordinate
+            print("\(currentCoordinate!.latitude), \(currentCoordinate!.longitude)")
+        }
     }
 }
 
