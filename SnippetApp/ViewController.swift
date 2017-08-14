@@ -166,7 +166,7 @@ class ViewController: UIViewController {
         textSnippet.setValue(text, forKey: "text")
         textSnippet.setValue(NSDate(), forKey: "date")
         if let coord = self.currentCoordinate{
-            textSnippet.setValue(coord.latitude, forKey: "latititude")
+            textSnippet.setValue(coord.latitude, forKey: "latitude")
             textSnippet.setValue(coord.longitude, forKey: "longitude")
         }
         delegate.saveContext();
@@ -239,7 +239,7 @@ extension ViewController : UITableViewDataSource {
         
         //upgrade the TableView function to display data from our corData model 
         let snippetData = data[indexPath.row] //pull out the data and have it displayed at the same inde number within the cell as it is in the array
-        let snippetDate = snippetData.value(forKey: "data") as! Date //pull out the date from the Database and force cast it to the "Date" type
+        let snippetDate = snippetData.value(forKey: "date") as! Date //pull out the date from the Database and force cast it to the "Date" type
         let snippetType = SnippetType(rawValue: snippetData.value(forKey: "type") as! String)! //pull out the string type too -- use the raw data to instantiate the SnippetType enum
         
         //format the date stored in the Date to something readable a, and then assign the string to our date label 

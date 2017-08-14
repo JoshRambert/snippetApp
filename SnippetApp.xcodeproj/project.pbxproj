@@ -133,6 +133,11 @@
 						CreatedOnToolsVersion = 8.2.1;
 						DevelopmentTeam = PN9Z6QQB56;
 						ProvisioningStyle = Automatic;
+						SystemCapabilities = {
+							com.apple.ApplicationGroups.iOS = {
+								enabled = 0;
+							};
+						};
 					};
 				};
 			};

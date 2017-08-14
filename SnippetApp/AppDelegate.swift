@@ -104,7 +104,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         let url = urls.last!.appendingPathComponent("SingleViewCoreData.sqlite")
         
         do { //load the dataBase from the URL
-          try coordinator.addPersistentStore(ofType: NSSQLiteStoreType, configurationName: nil, at: nil, options: nil)
+          try coordinator.addPersistentStore(ofType: NSSQLiteStoreType, configurationName: nil, at: url, options: nil)
         }catch {
           //replace this to handle the error appriopriately 
           let nserror = error as NSError
