@@ -9,10 +9,12 @@
 //import the location class 
 import CoreLocation
 import UIKit
+import Social
+import CoreData
 
 class ViewController: UIViewController {
     //declare an array of snippetData -- And Create a new instance of the Image picker -- create a property for to manage the Location
-    var data: [SnippetData] = [SnippetData]();
+    var data = [NSManagedObject](); //this is the type of data that CoreData will load the entities into
     let imagePicker = UIImagePickerController();
     let locationManager = CLLocationManager();
     
@@ -44,7 +46,31 @@ class ViewController: UIViewController {
     
     //tell the app when to load the data 
     override func viewWillAppear(_ animated: Bool){
+        //load the snippetData upon finished creation
+        reloadSnippetData();
         tableView.reloadData();
+    }
+    
+    //create a new function to load the new and improved data 
+    func reloadSnippetData(){
+        //create a shortcut to the appDelegate class 
+        let delegate = UIApplication.shared.delegate as! AppDelegate
+        //access the managedContext
+        let managedContext = delegate.managedObjectContext
+        
+        //create a "Fetch Request" -- or descride what information we want from our dataBase -- ask for a certain type of entity ordered in a certain way
+        let request = NSFetchRequest<NSFetchRequestResult>(entityName: "Snippet") //call the snippet entity to retrieve both Photo and Text entites -- reason: Base entity
+        let sortDescriptor = NSSortDescriptor(key: "date", ascending: false) // tell the dataBase how you want the data to be sorted
+        request.sortDescriptors = [sortDescriptor] // in order to attach the sortDescriptor it needs to be put into an array sincee it is possible to attach multiple
+        
+        //execute the fetch request 
+        do{
+            let fetchResults = try managedContext.fetch(request)
+            self.data = fetchResults as! [NSManagedObject]
+        } catch {
+            let e = error as NSError
+            print("Unresolved error \(e), \(e.userInfo)")
+        }
     }
 
     //create the action function that will create the new snippets
@@ -103,8 +129,8 @@ class ViewController: UIViewController {
         //redfine the body of the other view Controllers saveText closure to append the textSnippet to the data array
         textEntryVC.saveText = {(text: String)
             in
-            let newTextSnippet = TextData(text: text, creationDate: Date(), creationCoordinate: self.currentCoordinate)
-            self.data.append(newTextSnippet);
+            //let newTextSnippet = TextData(text: text, creationDate: Date(), creationCoordinate: self.currentCoordinate)
+            self.saveTextSnippet(text: text); //call in the save function and pass in the text we want to save
         }
         
         present(textEntryVC, animated: true, completion: nil);
@@ -125,6 +151,47 @@ class ViewController: UIViewController {
         present(imagePicker, animated: true, completion: nil)
     }
     
+    //create a new function for Saving text data -- in this funtion we are going to get acces to the Core Data stack, create a new instance of an entity and then configure the entity
+    func saveTextSnippet(text: String){
+        //create the properties that will hold the instance of the App delegate -- create a shotCut to the appDelegate so that its managedContext function can be accessed
+        let delegate = UIApplication.shared.delegate as! AppDelegate
+        let managedContext = delegate.managedObjectContext //NSManagedObject is a data container that can contain any type of data that we want
+        
+        //tell the managedObject what entity from our model we want it to represent with the descriptor keyword
+        let desc = NSEntityDescription.entity(forEntityName: "Textsnippet", in: managedContext) //so it knows which entity it represents
+        let textSnippet = NSManagedObject(entity: desc!, insertInto: managedContext) //insert into the scratchPad
+        
+        //in order to set all of the attributes that we defined in the textSnippet entity we use the key/value encoding
+        textSnippet.setValue(SnippetType.text.rawValue, forKey: "type");
+        textSnippet.setValue(text, forKey: "text")
+        textSnippet.setValue(NSDate(), forKey: "date")
+        if let coord = self.currentCoordinate{
+            textSnippet.setValue(coord.latitude, forKey: "latititude")
+            textSnippet.setValue(coord.longitude, forKey: "longitude")
+        }
+        delegate.saveContext();
+    }
+    
+    //create a new function for saving photo Data -- very similar to the saving text function
+    func savePhotoSnippet(photo: UIImage){
+        //repeat alot of the processes you did in the saveTextSnippet function
+        let delegate = UIApplication.shared.delegate as! AppDelegate //create a shortcut to the appDelegate class
+        let managedContext = delegate.managedObjectContext //access the managedContext function from the appDelegate class
+        let desc = NSEntityDescription.entity(forEntityName: "PhotoSnippet", in: managedContext)
+        let photoSnippet = NSManagedObject(entity: desc!, insertInto: managedContext)
+        let photoData = UIImagePNGRepresentation(photo) // create a new piece of data called photoData -- raw repesentation of the image whcih we get by passing in our UIImage to the function
+        
+        //set up te attriubutes for the photoSnippet entity 
+        photoSnippet.setValue(SnippetType.photo.rawValue, forKey: "type")
+        photoSnippet.setValue(photoData, forKey: "photo")
+        photoSnippet.setValue(Data(), forKey: "date")
+        if let coord = self.currentCoordinate{
+            photoSnippet.setValue(coord.latitude, forKey: "latitude")
+            photoSnippet.setValue(coord.longitude, forKey: "longitude")
+        }
+        delegate.saveContext();
+    }
+    
     //create a function that asks for location permission 
     func askForLocationPermissions(){
         if CLLocationManager.authorizationStatus() == .notDetermined {
@@ -143,9 +210,10 @@ extension ViewController : UIImagePickerControllerDelegate, UINavigationControll
                 print("Image could not be found")
                 return
         }
-        let newPhotoSnippet = PhotoData(photo: image, creationDate: Date(), creationCoordinate: self.currentCoordinate)
-        self.data.append(newPhotoSnippet)
         
+        //add the replacement data for the imagePickerControllerFuntion
+        savePhotoSnippet(photo: image)
+
         //dismiss the photo snippet 
         dismiss(animated: true, completion: nil)
     }
@@ -168,25 +236,90 @@ extension ViewController : UITableViewDataSource {
     //the final function tells the table view
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell: UITableViewCell
-        //reverses the way in which the data is displayed
-        let sortData = data.reversed() as [SnippetData]
-        //ask for the specific type of data at the specific row
-        let snippetData = sortData[indexPath.row]
+        
+        //upgrade the TableView function to display data from our corData model 
+        let snippetData = data[indexPath.row] //pull out the data and have it displayed at the same inde number within the cell as it is in the array
+        let snippetDate = snippetData.value(forKey: "data") as! Date //pull out the date from the Database and force cast it to the "Date" type
+        let snippetType = SnippetType(rawValue: snippetData.value(forKey: "type") as! String)! //pull out the string type too -- use the raw data to instantiate the SnippetType enum
         
         //format the date stored in the Date to something readable a, and then assign the string to our date label 
         let formatter = DateFormatter();
         formatter.dateFormat = "MMM d, yyyy hh:mm a"
-        let dateString = formatter.string(from: snippetData.date);
+        //updated dateString to use the new snippetDate value
+        let dateString = formatter.string(from: snippetDate);
         
         //create a aswitch statement depending on what type of data it is
-        switch snippetData.type{
-        case .text: cell = tableView.dequeueReusableCell(withIdentifier: "textSnippetCell", for: indexPath)
-            (cell as! TextSnippetCell).label.text = (snippetData as! TextData).textData
-        //assign the date String to our date label 
-            (cell as! TextSnippetCell).date.text = dateString
+        switch snippetType{
+            //add the new CoreData code - pull out the string for the text attributes -- then replace all previous instance of text with just snippetText
+        case .text: let snippetText = snippetData.value(forKey: "text") as! String
+        cell = tableView.dequeueReusableCell(withIdentifier: "textSnippetCell", for: indexPath) as! TextSnippetCell
+        (cell as! TextSnippetCell).label.text = snippetText;
+        //assign the date String to our date label
+        (cell as! TextSnippetCell).date.text = dateString
+        
+        //setup the tweet button within our cell -- this is the code that will be passed into the closures that we created within our textSnippetCells and photoSnippetCells
+        (cell as! TextSnippetCell).shareButton = {
+            //check to see if twitter is available
+            if SLComposeViewController.isAvailable(forServiceType: SLServiceTypeTwitter){
+            let text = snippetText  //get the useers text from the textdata object
+                
+            //create the viewController for creating a tweet -- placed in a guard statement to ensure that there is a value
+            guard let twVC = SLComposeViewController(forServiceType: SLServiceTypeTwitter)
+                else {
+                print("Couldn't create twitter compose controller")
+                    return
+                    }
+                
+                //check the length of the text data since twitter only supports 140 characters -- use the "setInitialText()" function to prePopulate the text field
+                if text.characters.count <= 140 {
+                twVC.setInitialText("\(text)")
+                } else {
+                    let tweetLengthIndex = text.index(text.startIndex, offsetBy: 140)
+                    let tweetChars = text.substring(to: tweetLengthIndex)
+                    twVC.setInitialText("\(tweetChars)")
+                    }
+                //lastly present the viewController
+                self.present(twVC, animated: true, completion:nil)
+                }
+            else {
+             let alert = UIAlertController(title: "You are not logged into twitter", message: "Please log into Twitter from the iOS Settings app.", preferredStyle: .alert)
             
-        case .photo: cell = tableView.dequeueReusableCell(withIdentifier: "photoSnippetCell", for: indexPath)
-        (cell as! PhotoSnippetCell).photo.image = (snippetData as! PhotoData).photoData
+                let dismissAction = UIAlertAction(title: "OK", style: .default, handler: nil);
+                
+            //add the alerts 
+                alert.addAction(dismissAction);
+                self.present(alert, animated: true, completion: nil);
+            }
+        }
+            
+        
+        case .photo:
+            let snippetPhoto = UIImage(data: snippetData.value(forKey: "photo") as! Data) //pull out the data for the photo attributes -- and pass it into a raw image attribute 
+            cell = tableView.dequeueReusableCell(withIdentifier: "photoSnippetCell", for: indexPath)
+                (cell as! PhotoSnippetCell).photo.image = snippetPhoto;
+        //add the social code for posting to twitter
+        (cell as! PhotoSnippetCell).shareButton = {
+            
+            //setup the tweet button for the Photo snippets
+            if SLComposeViewController.isAvailable(forServiceType: SLServiceTypeTwitter){
+                let photo = snippetPhoto;
+                guard let twVC = SLComposeViewController(forServiceType: SLServiceTypeTwitter) else{
+                    print("Couldn't create twitter compose controller")
+                    return
+                    }
+                twVC.setInitialText("Sent from Snippets");
+                twVC.add(photo)
+                self.present(twVC, animated: true, completion: nil)
+                }
+            else{
+                let alert = UIAlertController(title: "You are not logged into twitter", message: "Please log into Twitter form the iOS settings app.", preferredStyle: .alert)
+                
+                let dismissAction = UIAlertAction(title: "OK", style: .default, handler: nil)
+                //add the alerts 
+                alert.addAction(dismissAction)
+                self.present(alert, animated: true, completion: nil)
+                }
+            }
         }
         return cell;
     }

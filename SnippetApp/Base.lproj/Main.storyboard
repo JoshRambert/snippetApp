@@ -57,27 +57,40 @@
                                                             <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                             <nil key="highlightedColor"/>
                                                         </label>
+                                                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="fYL-EM-5bj">
+                                                            <rect key="frame" x="323" y="0.0" width="42" height="20"/>
+                                                            <state key="normal" title="Tweet">
+                                                                <color key="titleColor" red="1" green="0.80000001190000003" blue="0.40000000600000002" alpha="1" colorSpace="calibratedRGB"/>
+                                                            </state>
+                                                            <connections>
+                                                                <action selector="shareButtonPressed" destination="DRt-DE-9tp" eventType="touchUpInside" id="axI-iS-1sS"/>
+                                                            </connections>
+                                                        </button>
                                                     </subviews>
                                                     <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
                                                     <constraints>
+                                                        <constraint firstAttribute="trailing" secondItem="fYL-EM-5bj" secondAttribute="trailing" constant="10" id="1pT-zJ-fHL"/>
+                                                        <constraint firstItem="fYL-EM-5bj" firstAttribute="top" secondItem="g2A-Pi-sOP" secondAttribute="top" id="AiD-lf-aHD"/>
                                                         <constraint firstItem="yTi-Pt-NmU" firstAttribute="leading" secondItem="g2A-Pi-sOP" secondAttribute="leading" constant="8" id="XLe-j3-7x8"/>
                                                         <constraint firstAttribute="bottom" secondItem="yTi-Pt-NmU" secondAttribute="bottom" id="dHF-gP-bbd"/>
                                                         <constraint firstAttribute="trailing" secondItem="yTi-Pt-NmU" secondAttribute="trailing" constant="8" id="k6H-8x-Fio"/>
+                                                        <constraint firstAttribute="bottom" secondItem="fYL-EM-5bj" secondAttribute="bottom" id="pAs-SQ-1Uv"/>
+                                                        <constraint firstAttribute="trailing" secondItem="fYL-EM-5bj" secondAttribute="trailing" constant="10" id="tqU-HU-FF9"/>
                                                     </constraints>
                                                 </view>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="xL7-2u-ZsR">
-                                                    <rect key="frame" x="8" y="8" width="359" height="8"/>
+                                                    <rect key="frame" x="8" y="0.0" width="359" height="28"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                     <nil key="textColor"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                             </subviews>
                                             <constraints>
-                                                <constraint firstItem="g2A-Pi-sOP" firstAttribute="top" secondItem="xL7-2u-ZsR" secondAttribute="bottom" constant="8" id="1Le-oc-tZw"/>
+                                                <constraint firstItem="g2A-Pi-sOP" firstAttribute="top" secondItem="xL7-2u-ZsR" secondAttribute="bottom" constant="-4" id="1Le-oc-tZw"/>
                                                 <constraint firstItem="g2A-Pi-sOP" firstAttribute="top" secondItem="oF2-tu-Mwq" secondAttribute="top" constant="24" id="Eak-cX-LMr"/>
                                                 <constraint firstItem="g2A-Pi-sOP" firstAttribute="top" secondItem="oF2-tu-Mwq" secondAttribute="top" constant="24" id="H41-SM-Xxg"/>
                                                 <constraint firstItem="xL7-2u-ZsR" firstAttribute="leading" secondItem="oF2-tu-Mwq" secondAttribute="leadingMargin" id="aAe-PC-aES"/>
-                                                <constraint firstItem="xL7-2u-ZsR" firstAttribute="top" secondItem="oF2-tu-Mwq" secondAttribute="topMargin" id="e5z-zc-1vs"/>
+                                                <constraint firstItem="xL7-2u-ZsR" firstAttribute="top" secondItem="oF2-tu-Mwq" secondAttribute="topMargin" constant="-8" id="e5z-zc-1vs"/>
                                                 <constraint firstAttribute="bottom" secondItem="g2A-Pi-sOP" secondAttribute="bottom" id="oJD-17-cej"/>
                                                 <constraint firstAttribute="trailingMargin" secondItem="xL7-2u-ZsR" secondAttribute="trailing" id="pUy-ur-356"/>
                                                 <constraint firstItem="g2A-Pi-sOP" firstAttribute="leading" secondItem="oF2-tu-Mwq" secondAttribute="leading" id="r1B-oD-Qiu"/>
@@ -105,6 +118,8 @@
                                                 <constraint firstAttribute="trailing" secondItem="Eal-r7-5iB" secondAttribute="trailing" id="Csz-T8-Idl"/>
                                                 <constraint firstItem="Eal-r7-5iB" firstAttribute="top" secondItem="1vD-8r-dMK" secondAttribute="top" id="LWL-rd-7qX"/>
                                                 <constraint firstAttribute="bottom" secondItem="Eal-r7-5iB" secondAttribute="bottom" id="VpG-zM-IIh"/>
+                                                <constraint firstItem="Eal-r7-5iB" firstAttribute="centerY" secondItem="1vD-8r-dMK" secondAttribute="centerY" id="YR8-4P-V2O"/>
+                                                <constraint firstItem="Eal-r7-5iB" firstAttribute="centerX" secondItem="1vD-8r-dMK" secondAttribute="centerX" id="azY-br-xIk"/>
                                             </constraints>
                                         </tableViewCellContentView>
                                         <accessibility key="accessibilityConfiguration" identifier="photoSnippetCell"/>

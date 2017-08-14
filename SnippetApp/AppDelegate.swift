@@ -10,6 +10,7 @@
  App delegate is where we take care of launching, entering and exiting the app -- the highest level of control
  */
 import UIKit
+import CoreData
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -83,9 +84,65 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
 
     func applicationWillTerminate(_ application: UIApplication) {
-        // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
+        // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:. -- call the saved Data function here
+        self.saveContext();
     }
-
-
+    
+    //create the MOM or NSManagedObjectModel function -- this loads in the data model that we created within the data model editor
+    // MARK: - Core Data Stack
+    lazy var managedObjectModel: NSManagedObjectModel = {
+        //retrieve the location of the data model
+        let modelURL = Bundle.main.url(forResource: "SnippetData", withExtension: "momd")!
+        return NSManagedObjectModel(contentsOf: modelURL)!
+    }()
+    
+    //setup the NSPersistentStoreCoordinator -- this is the saved data that exists on the disk -- it uses the data model to know what the data should look like, then coordinates creating new data and saving data to the disk 
+    lazy var persistentStoreCoordinator: NSPersistentStoreCoordinator = {
+        //instantiate a new persistantStoreCoordinator by passing in the managed object model -- so that it knows what it looks like
+        let coordinator = NSPersistentStoreCoordinator(managedObjectModel: self.managedObjectModel)
+        let urls = FileManager.default.urls( for: .documentDirectory, in: .userDomainMask) //get the location of the dataBase
+        let url = urls.last!.appendingPathComponent("SingleViewCoreData.sqlite")
+        
+        do { //load the dataBase from the URL
+          try coordinator.addPersistentStore(ofType: NSSQLiteStoreType, configurationName: nil, at: nil, options: nil)
+        }catch {
+          //replace this to handle the error appriopriately 
+          let nserror = error as NSError
+            print ("Unresolved error \(nserror), \(nserror.userInfo)")
+            abort()
+        }
+        return coordinator
+    }()
+    
+    //next is the NSMangedObjestContext  -- purpose is to provide an area to play with our data. It is here that we will edit data and create new instances of data
+    lazy var managedObjectContext: NSManagedObjectContext = {
+        let coordinator = self.persistentStoreCoordinator
+        //create new instance of the class and pass in the type
+        var managedObjectContext = NSManagedObjectContext(concurrencyType: .mainQueueConcurrencyType)
+        //assign the persistant store coordinator to be the instance
+        managedObjectContext.persistentStoreCoordinator = coordinator
+        return managedObjectContext
+    }()
+    /*
+        REVIEW 
+         -- ManagedObjestModel describes our data
+         -- PersistantStoreCoordinator interfaces with the dataBase
+         -- ManagedObjectContext lets us create, edit and save data
+         */
+    
+    //create a helper function that makes it really easy to save data 
+    //MARK: - Core data Saving Support 
+    func saveContext (){
+        if managedObjectContext.hasChanges{ //check to see if weve made any changes
+            do {
+                try managedObjectContext.save(); //save the data id there are any changes
+            } catch{
+                //replace this to handle erros appropriately 
+                let nserror = error as NSError
+                print("Unresloved error \(nserror), \(nserror.userInfo)")
+                abort();
+            }
+        }
+    }
 }
 
