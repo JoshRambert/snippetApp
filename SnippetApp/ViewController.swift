@@ -251,7 +251,8 @@ extension ViewController : UITableViewDataSource {
         //create a aswitch statement depending on what type of data it is
         switch snippetType{
             //add the new CoreData code - pull out the string for the text attributes -- then replace all previous instance of text with just snippetText
-        case .text: let snippetText = snippetData.value(forKey: "text") as! String
+        case .text:
+            let snippetText = snippetData.value(forKey: "text") as! String
         cell = tableView.dequeueReusableCell(withIdentifier: "textSnippetCell", for: indexPath) as! TextSnippetCell
         (cell as! TextSnippetCell).label.text = snippetText;
         //assign the date String to our date label
@@ -322,6 +323,28 @@ extension ViewController : UITableViewDataSource {
             }
         }
         return cell;
+    }
+    //create the function that will make it possible to delete old snippets
+    @objc(tableView:commitEditingStyle:forRowAtIndexPath:) func tableView(_ tableView: UITableView, commit editingStlye: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath){
+        //in order to completely erase snippet: First delete data from managed context -- then delete the table view cell
+        
+        //create a shortcut to the AppDelegate
+        let delegate = UIApplication.shared.delegate as! AppDelegate
+        let managedContext = delegate.managedObjectContext
+        
+        //locate the piece of data that has been selected  -- then the delete button to do its job
+        let currentObject = data[indexPath.row]
+        managedContext.delete(currentObject)
+        
+        //then save what is left of the data and reload the Snippet data.
+        delegate.saveContext()
+        reloadSnippetData()
+        
+        //open up the tableViews for updates delete the rows selected then close the updates option.
+        tableView.beginUpates()
+        tableView.deleteRows(at: [indexPath], with: .automatic)
+        tableView.endUpdates()
+        
     }
 }
 
