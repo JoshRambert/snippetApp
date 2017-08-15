@@ -332,7 +332,7 @@ extension ViewController : UITableViewDataSource {
         let delegate = UIApplication.shared.delegate as! AppDelegate
         let managedContext = delegate.managedObjectContext
         
-        //locate the piece of data that has been selected  -- then the delete button to do its job
+        //locate the piece of data that has been selected  -- pass to the NSManagedContext and then have the delete button to do its job
         let currentObject = data[indexPath.row]
         managedContext.delete(currentObject)
         
@@ -340,8 +340,8 @@ extension ViewController : UITableViewDataSource {
         delegate.saveContext()
         reloadSnippetData()
         
-        //open up the tableViews for updates delete the rows selected then close the updates option.
-        tableView.beginUpates()
+        //open up the tableViews for updates delete the rows selected (With a little animation) and then close the updates option.
+        tableView.beginUpdates()
         tableView.deleteRows(at: [indexPath], with: .automatic)
         tableView.endUpdates()
         
