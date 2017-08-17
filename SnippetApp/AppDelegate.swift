@@ -11,6 +11,7 @@
  */
 import UIKit
 import CoreData
+import UserNotifications
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -59,12 +60,60 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var window: UIWindow?
 
-
-    func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
+    //add some notificaiton setup code
+    func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool
+    {
         // Override point for customization after application launch.
+        
+        //grab a reference to the UserNotificationCenter 
+        let center = UNUserNotificationCenter.current()
+        
+        center.requestAuthorization(options: [.alert, .badge, .sound])// assign the type of notificaiton there will be -- in this case alert, bagde and sound are used
+        {
+            granted, error in if granted
+            {
+                //call the function we just created
+                self.scheduleReminderNotification()
+            }
+        }
         return true
     }
-
+    
+    
+    
+    //create a new funtion to create and trigger the notifications
+    func scheduleReminderNotification(){
+        //get a refernce to the Current UNUserNotificationCenter which we will se to schedule the notifications later
+        let center = UNUserNotificationCenter.current()
+        
+        center.getPendingNotificationRequests(){
+        pendingRequests in
+            //Check to see if there are already notifications in our app -- create a new notification and store it unless it already exists
+            guard !pendingRequests.contains(where: {r in r.identifier == "Snippets.Reminder"})
+                else{
+                print("Notification already exists")
+                    return
+            }
+            
+            //Reference the NotificationContent -- Create the new reminder notification -- assign the content of the notification
+            let content = UNMutableNotificationContent()
+            content.title = "Reminder"
+            content.body = "Have you Snipped anything lately?"
+            content.sound = UNNotificationSound.default()
+            
+            //create the date or time of day for when the notification goes off
+            var fireDate = DateComponents()
+            fireDate.hour = 12
+            
+            //this is how often the notification goes off -- (Everyday at 12)
+            let trigger = UNCalendarNotificationTrigger(dateMatching: fireDate, repeats: true)
+            
+            //Create a request for that notification then display that notification throught] the UNUserNotificationCenter
+            let request = UNNotificationRequest(identifier: "Snippets.Reminder", content: content, trigger: trigger)
+            center.add(request, withCompletionHandler: nil);
+        }
+    }
+    
     func applicationWillResignActive(_ application: UIApplication) {
         // Sent when the application is about to move from active to inactive state. This can occur for certain types of temporary interruptions (such as an incoming phone call or SMS message) or when the user quits the application and it begins the transition to the background state.
         // Use this method to pause ongoing tasks, disable timers, and invalidate graphics rendering callbacks. Games should use this method to pause the game.

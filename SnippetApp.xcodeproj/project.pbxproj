@@ -19,6 +19,7 @@
 		412A9DFD1F3E4E0A00FA36A5 /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 412A9DFC1F3E4E0A00FA36A5 /* CoreData.framework */; };
 		412A9E001F3FBBF000FA36A5 /* SnippetData.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 412A9DFE1F3FBBF000FA36A5 /* SnippetData.xcdatamodeld */; };
 		413CC8141F3D002F00459A82 /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 413CC8131F3D002F00459A82 /* CoreLocation.framework */; };
+		419364A41F46009200641A17 /* UserNotifications.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 419364A31F46009200641A17 /* UserNotifications.framework */; };
 		41F8C1531F2FA461001BF476 /* TextSnippetEntryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 41F8C1521F2FA461001BF476 /* TextSnippetEntryViewController.swift */; };
 /* End PBXBuildFile section */
 
@@ -37,6 +38,7 @@
 		412A9DFC1F3E4E0A00FA36A5 /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
 		412A9DFF1F3FBBF000FA36A5 /* SnippetData.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = SnippetData.xcdatamodel; sourceTree = "<group>"; };
 		413CC8131F3D002F00459A82 /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
+		419364A31F46009200641A17 /* UserNotifications.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UserNotifications.framework; path = System/Library/Frameworks/UserNotifications.framework; sourceTree = SDKROOT; };
 		41F8C1521F2FA461001BF476 /* TextSnippetEntryViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TextSnippetEntryViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -45,6 +47,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				419364A41F46009200641A17 /* UserNotifications.framework in Frameworks */,
 				412A9DFD1F3E4E0A00FA36A5 /* CoreData.framework in Frameworks */,
 				412A9DDA1F3E2B2100FA36A5 /* Social.framework in Frameworks */,
 				413CC8141F3D002F00459A82 /* CoreLocation.framework in Frameworks */,
@@ -92,6 +95,7 @@
 		413CC8121F3D002F00459A82 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				419364A31F46009200641A17 /* UserNotifications.framework */,
 				412A9DFC1F3E4E0A00FA36A5 /* CoreData.framework */,
 				412A9DD91F3E2B2100FA36A5 /* Social.framework */,
 				413CC8131F3D002F00459A82 /* CoreLocation.framework */,
