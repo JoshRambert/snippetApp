@@ -68,10 +68,15 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         //grab a reference to the UserNotificationCenter 
         let center = UNUserNotificationCenter.current()
         
+        //setup up the delegate for the notifications
+        center.delegate = self;
         center.requestAuthorization(options: [.alert, .badge, .sound])// assign the type of notificaiton there will be -- in this case alert, bagde and sound are used
         {
             granted, error in if granted
             {
+                //make a reference to the notification categories 
+                center.setNotificationCategories(self.getNotificationCategories())
+                
                 //call the function we just created
                 self.scheduleReminderNotification()
             }
@@ -100,6 +105,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             content.title = "Reminder"
             content.body = "Have you Snipped anything lately?"
             content.sound = UNNotificationSound.default()
+            //assign the categoryto the daily reminders 
+            content.categoryIdentifier = "Snippets.Category.Reminder"
+            content.badge = 1
             
             //create the date or time of day for when the notification goes off
             var fireDate = DateComponents()
@@ -113,6 +121,23 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             center.add(request, withCompletionHandler: nil);
         }
     }
+    
+    //create a function for Notification Categories 
+    func getNotificationCategories() -> Set<UNNotificationCategory>
+    {
+        //create a text action -- give it a title and ID -- this will ultimately allow us to create a textSnippet straight from the notification
+        let textAction = UNNotificationAction(identifier: "Snippets.Action.NewText", title: "New Text", options: [.authenticationRequired, .foreground]) //the options section makes sure to unlock the phone and the .foreground part opens the app when it is pressed
+        
+        //do the same for the Photo Snippets
+        let photoAction = UNNotificationAction(identifier: "Photo.Action.NewPhoto", title: "New Photo", options: [.authenticationRequired, .foreground])
+        
+        //create the Category in which the actions will get stored -- intentIdentifiers  and options are left blank
+        let reminderCategory = UNNotificationCategory(identifier: "Snippets.Category.Reminder", actions: [textAction, photoAction], intentIdentifiers: [], options: [])
+        
+        //return the category 
+        return Set<UNNotificationCategory>([reminderCategory])
+    }
+    
     
     func applicationWillResignActive(_ application: UIApplication) {
         // Sent when the application is about to move from active to inactive state. This can occur for certain types of temporary interruptions (such as an incoming phone call or SMS message) or when the user quits the application and it begins the transition to the background state.
@@ -192,6 +217,27 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                 abort();
             }
         }
+    }
+}
+
+//create an extension of the AppDelegate class and then create a function within it to make the notification buttons dp what they are supposed to do
+extension AppDelegate: UNUserNotificationCenterDelegate{
+    
+    //for right now we are only concerned with the response parameter -- which deals with how the notification is responded to
+    func userNotificationCenter(_ center: UNUserNotificationCenter, didReceive response: UNNotificationResponse, withCompletionHandler completionHandler: @escaping () -> Void)
+    {
+        switch response.actionIdentifier{
+            //create the action for the Text Button
+            case "Snippets.Action.NewText": let vc = self.window!.rootViewController as! ViewController
+            vc.createNewTextSnippet();
+            
+            //create the Action for the Photo Button
+            case "Snippets.Action.NewPhoto": let vc = self.window!.rootViewController as! ViewController
+            vc.createNewPhotoSnippet();
+        default: break
+        }
+        //call completionHandler or else app crashes
+        completionHandler()
     }
 }
 
