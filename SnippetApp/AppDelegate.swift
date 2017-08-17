@@ -91,6 +91,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         //get a refernce to the Current UNUserNotificationCenter which we will se to schedule the notifications later
         let center = UNUserNotificationCenter.current()
         
+        center.removeAllPendingNotificationRequests(); //removed all pending requests for some reason
         center.getPendingNotificationRequests(){
         pendingRequests in
             //Check to see if there are already notifications in our app -- create a new notification and store it unless it already exists
@@ -109,9 +110,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             content.categoryIdentifier = "Snippets.Category.Reminder"
             content.badge = 1
             
-            //create the date or time of day for when the notification goes off
+            //create the date or time of day for when the notification goes off -- add a minute and a second
             var fireDate = DateComponents()
-            fireDate.hour = 12
+            fireDate.hour = 17
+            fireDate.minute = 13
+            fireDate.second = 40
             
             //this is how often the notification goes off -- (Everyday at 12)
             let trigger = UNCalendarNotificationTrigger(dateMatching: fireDate, repeats: true)
@@ -155,6 +158,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func applicationDidBecomeActive(_ application: UIApplication) {
         // Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
+        
+        //set the badge icon to 0 once the app is opened
+        application.applicationIconBadgeNumber = 0;
     }
 
     func applicationWillTerminate(_ application: UIApplication) {
@@ -238,6 +244,35 @@ extension AppDelegate: UNUserNotificationCenterDelegate{
         }
         //call completionHandler or else app crashes
         completionHandler()
+    }
+    
+    //create new funciton for displaying notifications while in the app
+    func userNotificationCenter(_ center: UNUserNotificationCenter, willPresent notification: UNNotification, withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void)
+    {
+        //create a reference to the notification request content
+        let content = notification.request.content
+        //create an if statement to see which category it belongs to
+        if content.categoryIdentifier == "Snippets.Category.Reminder"
+        {
+            //reference the rootViewController
+            let vc = self.window!.rootViewController as! ViewController
+            
+            //instantiate alert using the title and body
+            let alert = UIAlertController(title: content.title, message: content.body, preferredStyle: .alert)
+            
+            //create the photo, text and cancel actions -- then add them to the window
+            let newTextSnippetAction = UIAlertAction(title: "New Text Snippet", style: .default){(action: UIAlertAction) in vc.createNewTextSnippet()}
+            
+            let newPhotoSnippetAction = UIAlertAction(title: "New Photo Snippet", style: .default){(action: UIAlertAction) in vc.createNewPhotoSnippet()}
+            
+            let cancelAction = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
+            
+            alert.addAction(newTextSnippetAction)
+            alert.addAction(newPhotoSnippetAction);
+            alert.addAction(cancelAction) // dont forget the cancel action
+            
+            //present them
+            vc.present(alert, animated: true, completion: nil)        }
     }
 }
 
