@@ -9,6 +9,9 @@
 /*
  App delegate is where we take care of launching, entering and exiting the app -- the highest level of control
  */
+
+//"self" represents the current class instance -- in this case the AppDelegate would be the current class instance
+
 import UIKit
 import CoreData
 import UserNotifications
