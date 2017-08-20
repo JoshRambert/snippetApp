@@ -42,6 +42,14 @@ class ViewController: UIViewController {
         
         //call the Location permission func 
         askForLocationPermissions();
+        
+        variableViewTest()
+    }
+    
+    func variableViewTest(){
+        var x = 0
+        x = 1
+        x = 2
     }
     
     //tell the app when to load the data 
