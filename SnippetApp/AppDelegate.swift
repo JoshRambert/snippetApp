@@ -26,9 +26,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     
     //create an empty function to lay down some groundwork for the shortcuts -- this first function is where we are going to write the logic to determine what shortcut was executed and what to do about it
     func handleShortcut(shortCutItem: UIApplicationShortcutItem) {
-        //here is how we will gain access to files from the App delegate
-        
-        //call the functions from within the app to the Case Statements
+        //for each shortcutItem inflate either the createNewtext ViewController or the newPhotoViewController
         switch shortCutItem.type {
         case ShortCutItems.newText.rawValue: let vc = self.window!.rootViewController as! ViewController
         vc.createNewTextSnippet();
@@ -42,8 +40,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     //the next function is from the UIApplicationDelegate Protocol and will get automatically called when we launch the app 
     func application(_ application: UIApplication, performActionFor shortcutItem: UIApplicationShortcutItem, completionHandler: @escaping (Bool) -> Void){
         //here we are going to check if the user left the view Controller open before calling the shortcut again ---
-        let vc = self.window!.rootViewController!
-        if vc.presentedViewController != nil{
+        let vc = self.window!.rootViewController! // this is the window for the rootViewController
+        if vc.presentedViewController != nil{ //if the viewController was left open -- either close the current snippet or continue snippeting
+            
             //use alert controller to ask the user -- continue the Action -- and erase the action
             let alert = UIAlertController(title: "Unifinished Snippet", message: "Do you want to continue creating this snippet, or erase and start a new snippet?", preferredStyle: .alert)
             let continueAction = UIAlertAction(title: "Continue", style: .default, handler: nil)
@@ -55,9 +54,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             alert.addAction(eraseAction)
             vc.presentedViewController!.present(alert, animated: true, completion: nil)
         } else{
+            //continue on with the shortCut action
             handleShortcut(shortCutItem: shortcutItem)
         }
-        //call the first function in this function
+        //call the shortCutItem Function
         handleShortcut(shortCutItem: shortcutItem);
     }
 
@@ -73,13 +73,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         //setup up the delegate for the notifications
         center.delegate = self;
-        center.requestAuthorization(options: [.alert, .badge, .sound])// assign the type of notificaiton there will be -- in this case alert, bagde and sound are used
+        center.requestAuthorization(options: [.alert, .badge, .sound])// assign the type of notification there will be -- in this case alert, bagde and sound are used
         {
-            granted, error in if granted
+            granted, error in if granted //just the syntax used for the UserNotificationCenter
             {
                 //make a reference to the notification categories 
                 center.setNotificationCategories(self.getNotificationCategories())
-                
                 //call the function we just created
                 self.scheduleReminderNotification()
             }
@@ -87,11 +86,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         return true
     }
     
-    
-    
-    //create a new funtion to create and trigger the notifications
+    //create a new function to create and trigger the notifications
     func scheduleReminderNotification(){
-        //get a refernce to the Current UNUserNotificationCenter which we will se to schedule the notifications later
+        //get a reference to the Current UNUserNotificationCenter which we will set to schedule the notifications later
         let center = UNUserNotificationCenter.current()
         
         center.removeAllPendingNotificationRequests(); //removed all pending requests for some reason
@@ -109,7 +106,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             content.title = "Reminder"
             content.body = "Have you Snipped anything lately?"
             content.sound = UNNotificationSound.default()
-            //assign the categoryto the daily reminders 
+            //assign the category to the daily reminders
             content.categoryIdentifier = "Snippets.Category.Reminder"
             content.badge = 1
             
@@ -167,7 +164,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
 
     func applicationWillTerminate(_ application: UIApplication) {
-        // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:. -- call the saved Data function here
+        // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:. 
+        
+        //-- call the saved Data function here
         self.saveContext();
     }
     
@@ -208,7 +207,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }()
     /*
         REVIEW 
-         -- ManagedObjestModel describes our data
+         -- ManagedObjectModel describes our data
          -- PersistantStoreCoordinator interfaces with the dataBase
          -- ManagedObjectContext lets us create, edit and save data
          */
@@ -218,9 +217,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func saveContext (){
         if managedObjectContext.hasChanges{ //check to see if weve made any changes
             do {
-                try managedObjectContext.save(); //save the data id there are any changes
+                try managedObjectContext.save(); //save the data if there are any changes
             } catch{
-                //replace this to handle erros appropriately 
+                //replace this to handle errors appropriately 
                 let nserror = error as NSError
                 print("Unresloved error \(nserror), \(nserror.userInfo)")
                 abort();
