@@ -1,0 +1,38 @@
+{
+  "properties" : {
+    "on-demand-resource-tags" : [
+      "Graphics"
+    ]
+  },
+  "info" : {
+    "version" : 1,
+    "author" : "xcode"
+  },
+  "data" : [
+    {
+      "idiom" : "universal"
+    },
+    {
+      "idiom" : "universal",
+      "graphics-feature-set" : "metal2v2"
+    },
+    {
+      "idiom" : "universal",
+      "graphics-feature-set" : "metal3v2"
+    },
+    {
+      "idiom" : "universal",
+      "memory" : "4GB"
+    },
+    {
+      "idiom" : "universal",
+      "graphics-feature-set" : "metal2v2",
+      "memory" : "4GB"
+    },
+    {
+      "idiom" : "universal",
+      "graphics-feature-set" : "metal3v2",
+      "memory" : "4GB"
+    }
+  ]
+}

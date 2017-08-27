@@ -18,6 +18,8 @@ class ViewController: UIViewController {
     let imagePicker = UIImagePickerController();
     let locationManager = CLLocationManager();
     
+    var resourceRequest: NSBundleResourceRequest! // this is used for accessing resources from the cloud ODR (On - Demand - Resources)
+    
     //create a variable that will handle what actually happens when the location update is successfull
     var currentCoordinate: CLLocationCoordinate2D?;
     
@@ -26,7 +28,7 @@ class ViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad();
-        //assign the Delegate for the Image Picker to the ciew controller class
+        //assign the Delegate for the Image Picker to the view controller class
         imagePicker.delegate = self;
         
         //set the delegate of our location manager to the View Controller so it knows which ones to handle 
@@ -36,20 +38,33 @@ class ViewController: UIViewController {
         locationManager.desiredAccuracy = kCLLocationAccuracyBest;
         locationManager.distanceFilter = 50.0
         
-        //tell the table view to match the height of whatever the user input 
+        //tell the table view to match the height of whatever the user input -- including text and Photo
         tableView.estimatedRowHeight = 100;
         tableView.rowHeight =  UITableViewAutomaticDimension
         
         //call the Location permission func 
         askForLocationPermissions();
         
-        variableViewTest()
+        //call the fetchODR function 
+        fetchODR();
     }
     
-    func variableViewTest(){
-        var x = 0
-        x = 1
-        x = 2
+    //create the function tha will fetch the resources from the Cloud storage -- resources can be downloaded and used on our app as if they were apart of it the entire time
+    func fetchODR() {
+        //Create a new set of tags within code (already made graphics tag) -- Initialize the NSBundleResourceRequest object using the tags
+        let tags = Set(arrayLiteral: "Graphics")
+        resourceRequest = NSBundleResourceRequest(tags: tags)
+        
+        //start to use the resources that "Graphics" provides
+        resourceRequest.beginAccessingResources
+            {
+                ( error: Error? ) in
+                if error != nil {
+                    print("Graphics resources were not loaded")
+                    return
+                }
+                print("Resources can now be accesed as usual") // -- instead of this print statement we will be accessing resources that we will want to use
+            }
     }
     
     //tell the app when to load the data 
@@ -161,7 +176,8 @@ class ViewController: UIViewController {
     
     //create a new function for Saving text data -- in this funtion we are going to get acces to the Core Data stack, create a new instance of an entity and then configure the entity
     func saveTextSnippet(text: String){
-        //create the properties that will hold the instance of the App delegate -- create a shotCut to the appDelegate so that its managedContext function can be accessed
+        
+        //--create a shortCut to the appDelegate so that its managedContext function can be accessed
         let delegate = UIApplication.shared.delegate as! AppDelegate
         let managedContext = delegate.managedObjectContext //NSManagedObject is a data container that can contain any type of data that we want
         
