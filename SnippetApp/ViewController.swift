@@ -13,7 +13,7 @@ import Social
 import CoreData
 
 class ViewController: UIViewController {
-    //declare an array of snippetData -- And Create a new instance of the Image picker -- create a property for to manage the Location
+    //declare an array of snippetData -- And Create a new instance of the Image picker -- create a property to manage the Location
     var data = [NSManagedObject](); //this is the type of data that CoreData will load the entities into
     let imagePicker = UIImagePickerController();
     let locationManager = CLLocationManager();
@@ -34,7 +34,7 @@ class ViewController: UIViewController {
         //set the delegate of our location manager to the View Controller so it knows which ones to handle 
         locationManager.delegate = self;
         
-        //create some more properties for actually locating the user -- the first one sets the desired accuracy to its highest setting and then set the distance filter to 50 -- the distance filter tells the location manager how far away user must mover in order to update the location (in meters)
+        //create some more properties for actually locating the user -- the first one sets the desired accuracy to its highest setting and then set the distance filter to 50 -- the distance filter tells the location manager how far away user must move in order to update the location (in meters)
         locationManager.desiredAccuracy = kCLLocationAccuracyBest;
         locationManager.distanceFilter = 50.0
         
