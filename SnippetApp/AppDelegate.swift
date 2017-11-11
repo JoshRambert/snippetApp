@@ -169,9 +169,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         //-- call the saved Data function here
         self.saveContext();
     }
-    
+    // MARK: - Core Data Stack -- First it is created within the ModelData class then it is initialized here 
+
     //create the MOM or NSManagedObjectModel function -- this loads in the data model that we created within the data model editor
-    // MARK: - Core Data Stack
     lazy var managedObjectModel: NSManagedObjectModel = {
         //retrieve the location of the data model
         let modelURL = Bundle.main.url(forResource: "SnippetData", withExtension: "momd")!
@@ -182,7 +182,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     lazy var persistentStoreCoordinator: NSPersistentStoreCoordinator = {
         //instantiate a new persistantStoreCoordinator by passing in the managed object model -- so that it knows what it looks like
         let coordinator = NSPersistentStoreCoordinator(managedObjectModel: self.managedObjectModel)
-        let urls = FileManager.default.urls( for: .documentDirectory, in: .userDomainMask) //get the location of the dataBase
+        let urls = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask) //get the location of the dataBase
         let url = urls.last!.appendingPathComponent("SingleViewCoreData.sqlite")
         
         do { //load the dataBase from the URL
@@ -196,7 +196,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         return coordinator
     }()
     
-    //next is the NSMangedObjestContext  -- purpose is to provide an area to play with our data. It is here that we will edit data and create new instances of data
+    //next is the NSManagedObjectContext -- purpose is to provide an area to play with our data. It is here that we will edit data and create new instances of data -- this is also public to the rest of the application
     lazy var managedObjectContext: NSManagedObjectContext = {
         let coordinator = self.persistentStoreCoordinator
         //create new instance of the class and pass in the type

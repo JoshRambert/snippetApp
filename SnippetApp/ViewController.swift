@@ -81,10 +81,10 @@ class ViewController: UIViewController {
         //access the managedContext
         let managedContext = delegate.managedObjectContext
         
-        //create a "Fetch Request" -- or descride what information we want from our dataBase -- ask for a certain type of entity ordered in a certain way
+        //create a "Fetch Request" -- or describe what information we want from our dataBase -- ask for a certain type of entity ordered in a certain way
         let request = NSFetchRequest<NSFetchRequestResult>(entityName: "Snippet") //call the snippet entity to retrieve both Photo and Text entites -- reason: Base entity
         let sortDescriptor = NSSortDescriptor(key: "date", ascending: false) // tell the dataBase how you want the data to be sorted
-        request.sortDescriptors = [sortDescriptor] // in order to attach the sortDescriptor it needs to be put into an array sincee it is possible to attach multiple
+        request.sortDescriptors = [sortDescriptor] // in order to attach the sortDescriptor it needs to be put into an array since it is possible to attach multiple
         
         //execute the fetch request 
         do{
@@ -149,7 +149,7 @@ class ViewController: UIViewController {
         //this is the transition style from one view controller to the next -- it will slide up from the bottom when presented
         textEntryVC.modalTransitionStyle = .coverVertical;
         
-        //redfine the body of the other view Controllers saveText closure to append the textSnippet to the data array
+        //redefine the body of the other view Controllers saveText closure to append the textSnippet to the data array
         textEntryVC.saveText = {(text: String)
             in
             //let newTextSnippet = TextData(text: text, creationDate: Date(), creationCoordinate: self.currentCoordinate)
@@ -177,7 +177,7 @@ class ViewController: UIViewController {
     //create a new function for Saving text data -- in this funtion we are going to get acces to the Core Data stack, create a new instance of an entity and then configure the entity
     func saveTextSnippet(text: String){
         
-        //--create a shortCut to the appDelegate so that its managedContext function can be accessed
+        //--create a shortCut to the appDelegate so that its managedObjectContext function can be accessed
         let delegate = UIApplication.shared.delegate as! AppDelegate
         let managedContext = delegate.managedObjectContext //NSManagedObject is a data container that can contain any type of data that we want
         

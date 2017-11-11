@@ -24,7 +24,7 @@ class SnippetData{
     let date: Date;
     let coordinate: CLLocationCoordinate2D?
     
-    //create an init func that takes the snippet Type and displays wich one was chosen
+    //create an init func that takes the snippet Type and displays which one was chosen
     /*
      Created parameter for the InIt function and then assigned the parameter value to our type constant
      */
